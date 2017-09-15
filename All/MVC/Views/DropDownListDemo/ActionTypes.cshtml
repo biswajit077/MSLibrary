@@ -1,0 +1,27 @@
+﻿@model MVC.Models.ActionTypeModel
+@using System.Web.Mvc.Html
+@using MVC.Controllers
+@using MVC.Models;
+@using MVC.Utilities;
+
+@{
+    ViewBag.Title = "Action Types";
+}
+<h2>ActionTypes</h2>
+
+@Html.LabelFor(model => model.ActionId)
+@Html.EnumDropDownListFor(model => model.ActionTypeList)
+@Html.EnumDropDownList("ActionTypeModel.ActionTypeList", Model.ActionTypeList)
+@Html.DropDownList("gender",MyExtensionMethod.ToSelectList(typeof(DropDownListDemoController.ActionType)),
+    new
+    {
+        data_bind = "value: Gender",
+    })
+
+@{
+    
+}
+@*@Html.EnumDropDownListFor(model => model.ActionId, Model.ActionTypeList)*@
+
+
+

@@ -1,0 +1,9 @@
+﻿@model MVC.Models.ActionModel
+@{
+    ViewBag.Title = "Index";
+}
+<h2>Index</h2>
+
+
+@Html.LabelFor(model => model.ActionId)
+@Html.DropDownListFor(model => model.ActionId, Model.ActionsList)
