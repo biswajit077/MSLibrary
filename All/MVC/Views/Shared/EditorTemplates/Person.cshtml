@@ -1,19 +1,10 @@
 ﻿@model MVC.Models.Person
-    @{
-        var a = 0;
-        var valuesCount = 0;
-    }
 <tr>  
     <td>
         @{
             //ViewData["row"] = (int) ViewData["row"] + 10;
-            int r = 0;
-            if (r == 0)
-            {
-                
-            }
         }
-        @(valuesCount)        
+        @(ViewData["row"])        
     </td>
     <td style="border: 2px solid black; text-align: center; word-wrap: break-word;">  
         @Html.DisplayFor(modelItem => modelItem.ID)  

@@ -1,0 +1,20 @@
+﻿@using MVC.Utilities
+@model ModelClass.ViewModel.CharacterViewModel
+
+@using ( Html.BeginCollectionItem( "Characters" ) )
+{
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor( model => @Model.FirstName )
+        </dt>
+        <dd>
+            @Html.EditorFor( model => @Model.FirstName )
+        </dd>
+        <dt>
+            @Html.DisplayNameFor( model => @Model.LastName )
+        </dt>
+        <dd>
+            @Html.EditorFor( model => @Model.LastName )
+        </dd>
+    </dl>
+}

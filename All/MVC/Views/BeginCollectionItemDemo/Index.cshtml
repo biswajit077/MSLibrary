@@ -1,0 +1,49 @@
+﻿@model ModelClass.ViewModel.HomeViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "home-view", @class = "english-form", enctype = "multipart/form-data" }))
+{
+    <h4>Classic Books</h4>
+
+    <dl class="dl-horizontal" id="booksContainer">
+        @foreach (var classicBook in @Model.ClassicBooks)
+        {
+            @Html.DisplayFor(model => classicBook);
+        }
+    </dl>
+
+    <hr />
+    <h4>New Books</h4>
+    <div id="newBooks">
+        @for (int i = 0; i < @Model.NewBooks.Count(); i++)
+        {
+            @Html.EditorFor(model => @Model.NewBooks[i])
+        }
+    </div>
+
+    <input type="button" id="addbook" name="addbook" value="Add Book" />
+    <hr />
+    <dl />
+    <input type="submit" id="submit" name="submit" value="Save" />
+}
+
+@section Scripts {
+    <script type="text/javascript">
+
+        $("#addbook").on('click', function () {
+
+            $.ajax({
+                async: false,
+                url: '/Home/CreateNewBook'
+            }).success(function (partialView) {
+
+                $('#newBooks').append(partialView);
+
+            });
+        });
+
+    </script>
+}
+
