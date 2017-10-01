@@ -1,0 +1,46 @@
+﻿  @model ModelClass.Model.Company
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Company</h2>
+<div>
+    @Html.LabelFor(m => m.Name)
+    @Html.EditorFor(m => m.Name)
+</div>
+<fieldset>
+    <legend>Employees</legend>
+    <div id="new-Employee">
+        @foreach (var Employee in Model.Employees)
+        {
+            Html.RenderPartial("_Employee", Employee);
+        }
+    </div>
+    <div>
+        <input type="button" id="addemployee" name="addemployee" value="Add Employee"/>
+        <br/>
+    </div>
+    <br/>
+    @section Scripts
+    {
+        <script type="text/javascript">
+            $('#addemployee').on('click', function () {
+                $.ajax({
+                    async: false,
+                    url: '/Company/AddNewEmployee'
+                }).success(function (partialView) {
+                    $('#new-Employee').append(partialView);
+                });
+            });
+
+            $("#deleteRow").live("click", function () {
+                $(this).parents("#employeeRow:first").remove();
+                return false;
+            });
+        </script>
+    }
+</fieldset>
+<div>
+<input type="submit" value="Submit" />
+</div>

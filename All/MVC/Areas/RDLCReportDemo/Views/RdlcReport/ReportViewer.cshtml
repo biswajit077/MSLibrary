@@ -1,0 +1,41 @@
+﻿@model MVC.Areas.RDLCReportDemo.Models.SearchParameterModel
+@{
+    ViewBag.Title = "Custom Report Viewer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<hgroup class="title">
+    @ViewBag.Title
+</hgroup>
+<section id="ReportViewer">
+    <h4>Overall Summary Report.</h4>
+    @using (Html.BeginForm(new {ReturnUrl = ViewBag.ReturnUrl}))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <fieldset>
+            <legend>Report 1</legend>
+            <ol>
+                <li>
+                    @Html.LabelFor(m=>m.Territory)
+                    @Html.TextBoxFor(m=>m.Territory)
+                    @Html.ValidationMessageFor(m=>m.Territory)
+                </li>
+            </ol>
+            <input type="submit" id="btnSubmit" value="View Report"/>
+        </fieldset>
+    }
+</section>
+@if (Model != null)
+{
+    <section class="social" id="ReportDisplayPanel">
+        <h4>Report Viewer Section.</h4>
+        @Html.ActionLink("View Report in PDF Format", "GenerateAndDisplayReport", "RdlcReport", new {area="RDLCReportDemo", teritory = Model.Territory, format="pdf"})
+        @Html.ActionLink("Download Report in PDF Format", "DownloadReport","RdlcReport", new { teritory = Model.Territory, format="pdf"})
+        <img src="@Url.Action("GenerateAndDisplayReport","RdlcReport", new {teritory=Model.Territory, format=Model.Format})"/>
+    </section>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

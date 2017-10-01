@@ -1,0 +1,36 @@
+﻿@using MVC.Utilities
+@model ModelClass.ViewModel.SubCategoryViewModel
+<fieldset>
+    @using (@Html.BeginHtmlFieldPrefixScope(Model.PreviousFieldId))
+    {
+        using (@Html.BeginCollectionItem("Subcategories"))
+        {
+        <div>
+            <div class="editor-label" style="float: left; width: 70px;">
+                Name:
+            </div>
+            <div style="float: left">
+                @Html.TextBoxFor(m => m.Name)
+            </div>
+        </div>
+        <div style="clear: both">
+            <div class="editor-label" style="float: left; width: 70px">
+                <div>
+                    Products:
+                </div>
+            </div>
+            <div style="float: left">
+                <fieldset>
+                    <div id="@Html.ViewData.TemplateInfo.HtmlFieldPrefix.Trim('.')">
+                        @Html.ActionLink("Add product...", "AddProduct", null, new { @class = "addProductItem" })
+                        @foreach (var prod in @Model.Products)
+                        {
+                            @Html.Partial("ProductPartial", prod)
+                        }
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        }
+    }
+</fieldset>

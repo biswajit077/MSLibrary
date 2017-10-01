@@ -1,0 +1,22 @@
+﻿@using MVC.Utilities
+@model ModelClass.ViewModel.ProductViewModel
+@using (@Html.BeginHtmlFieldPrefixScope(Model.PreviousFieldId))
+{
+    using (@Html.BeginCollectionItem("Products"))
+    {
+    <div>
+        <fieldset>
+            <div style="float: left; width: 50%">
+                <div class="editor-field">
+                    @Html.LabelFor(t => t.Name): @Html.TextBoxFor(t => t.Name)
+                </div>
+            </div>
+            <div style="float: left; width: 49%">
+                <div class="editor-field">
+                    @Html.LabelFor(t => t.Price): @Html.TextBoxFor(t => t.Price)
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    }
+}

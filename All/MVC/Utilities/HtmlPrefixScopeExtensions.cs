@@ -59,7 +59,12 @@ namespace MVC.Utilities
 
 				previousHtmlFieldPrefix = templateInfo.HtmlFieldPrefix;
 				templateInfo.HtmlFieldPrefix = htmlFieldPrefix;
-			}
+			    if (!string.IsNullOrEmpty(htmlFieldPrefix))
+			    {
+			        templateInfo.HtmlFieldPrefix = string.Format("{0}.{1}", templateInfo.HtmlFieldPrefix,
+			            htmlFieldPrefix);
+			    }
+            }
 
 			public void Dispose()
 			{

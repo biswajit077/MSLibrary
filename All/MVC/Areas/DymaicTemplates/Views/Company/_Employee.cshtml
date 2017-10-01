@@ -1,0 +1,20 @@
+﻿@using MVC.Utilities
+@model ModelClass.Model.Employee
+@using (Html.BeginCollectionItem("Employees"))
+{
+    <div id="employeeRow" class="employeeRow">
+        @Html.LabelFor(m => m.Name)
+        @Html.EditorFor(m => m.Name)
+
+        @Html.LabelFor(m => m.Telephone)
+        @Html.EditorFor(m => m.Telephone)
+
+        @Html.LabelFor(m => m.Mobile)
+        @Html.EditorFor(m => m.Mobile)
+
+        @Html.LabelFor(m => m.JobTitle)
+        @Html.EditorFor(m => m.JobTitle)
+
+        <a href="#" id="deleteRow" class="deleteRow" onclick="deleteFunction()">Delete</a>
+    </div>
+}

@@ -1,0 +1,22 @@
+﻿@using MVC.Utilities
+@model System.Collections.Generic.List<ModelClass.ViewModel.SubCategoryViewModel>
+<div>
+    <fieldset>
+        <div>
+            <div class="editor-label">
+                <div>
+                    Subcategories
+                </div>
+            </div>
+            <div class="editor-label">
+                <div id="@Html.ViewData.TemplateInfo.HtmlFieldPrefix.Trim('.')">
+                    @Html.ActionLink("Add another subcategory...", "AddSubCategory", null, new { @class = "addSubcategoryItem" })
+                    @foreach (var subcategory in Model)
+                    {
+                        @Html.Partial("SubcategoryPartial", subcategory)
+                    }
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>

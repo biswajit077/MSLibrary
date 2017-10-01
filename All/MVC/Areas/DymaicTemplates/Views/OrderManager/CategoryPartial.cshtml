@@ -1,0 +1,18 @@
+﻿@using MVC.Utilities
+@model ModelClass.ViewModel.CategoryViewModel
+@using (@Html.BeginCollectionItem("Categories"))
+{
+    <div>
+        <div class="editor-label">
+                <div>
+                    Categories
+                </div>
+            </div>
+        <fieldset>
+            <div>
+                Name:@Html.TextBoxFor(t => t.Name)
+            </div>
+            @Html.Partial("SubcategoriesPartial", Model.Subcategories)
+        </fieldset>
+    </div>
+}

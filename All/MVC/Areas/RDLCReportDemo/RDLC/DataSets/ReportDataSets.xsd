@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ReportDataSets" targetNamespace="http://tempuri.org/ReportDataSets.xsd" xmlns:mstns="http://tempuri.org/ReportDataSets.xsd" xmlns="http://tempuri.org/ReportDataSets.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ReportDataSets" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="ReportDataSets" msprop:Generator_UserDSName="ReportDataSets">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="WorldModel" msprop:Generator_TableClassName="WorldModelDataTable" msprop:Generator_TableVarName="tableWorldModel" msprop:Generator_TablePropName="WorldModel" msprop:Generator_RowDeletingName="WorldModelRowDeleting" msprop:Generator_RowChangingName="WorldModelRowChanging" msprop:Generator_RowEvHandlerName="WorldModelRowChangeEventHandler" msprop:Generator_RowDeletedName="WorldModelRowDeleted" msprop:Generator_UserTableName="WorldModel" msprop:Generator_RowChangedName="WorldModelRowChanged" msprop:Generator_RowEvArgName="WorldModelRowChangeEvent" msprop:Generator_RowClassName="WorldModelRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Territory" msprop:Generator_ColumnVarNameInTable="columnTerritory" msprop:Generator_ColumnPropNameInRow="Territory" msprop:Generator_ColumnPropNameInTable="TerritoryColumn" msprop:Generator_UserColumnName="Territory" type="xs:string" minOccurs="0" />
+              <xs:element name="Country" msprop:Generator_ColumnVarNameInTable="columnCountry" msprop:Generator_ColumnPropNameInRow="Country" msprop:Generator_ColumnPropNameInTable="CountryColumn" msprop:Generator_UserColumnName="Country" type="xs:string" minOccurs="0" />
+              <xs:element name="Years" msprop:Generator_ColumnVarNameInTable="columnYears" msprop:Generator_ColumnPropNameInRow="Years" msprop:Generator_ColumnPropNameInTable="YearsColumn" msprop:Generator_UserColumnName="Years" type="xs:string" minOccurs="0" />
+              <xs:element name="States" msprop:Generator_ColumnVarNameInTable="columnStates" msprop:Generator_ColumnPropNameInRow="States" msprop:Generator_ColumnPropNameInTable="StatesColumn" msprop:Generator_UserColumnName="States" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

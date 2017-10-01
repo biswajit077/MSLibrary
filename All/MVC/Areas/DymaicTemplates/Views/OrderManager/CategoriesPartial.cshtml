@@ -1,0 +1,6 @@
+﻿@using MVC.Utilities
+@model System.Collections.Generic.List<ModelClass.ViewModel.CategoryViewModel>
+@foreach (var category in Model)
+{
+    @Html.Partial("CategoryPartial", category)
+}
