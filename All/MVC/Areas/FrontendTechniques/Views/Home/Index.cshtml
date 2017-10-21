@@ -1,0 +1,56 @@
+﻿@model IEnumerable<MVC.Areas.FrontendTechniques.Models.CheckModel>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+@foreach (var model in Model)
+{
+    @Html.TextBoxFor(m=>model.Name)
+    @Html.CheckBoxFor(x => model.Checked)
+}
+<br/>
+<br/>
+<h2>Edit</h2>
+
+<script src="@Url.Content("~/Scripts/jquery-1.10.2.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>ListModel</legend>
+
+        @*<div class="editor-label">
+            @Html.LabelFor(model => model.ListName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ListName)
+            @Html.ValidationMessageFor(model => model.ListName)
+        </div>*@
+
+        <div class="editor-field" id="ListDiv" />
+
+        @*@{Html.RenderAction("List", new { model = Model });}*@
+        @Ajax.ActionLink("Add List Item",
+            "Index",
+            "Home",
+            new {Area="FrontendTechniques", list = Model.ToList()},
+                new AjaxOptions
+                {
+                    //UpdateTargetId = "ListDiv",
+                    //InsertionMode = InsertionMode.Replace,
+                    HttpMethod = "POST"
+                })
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+

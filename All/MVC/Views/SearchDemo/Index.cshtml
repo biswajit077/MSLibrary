@@ -1,0 +1,149 @@
+﻿@using MVC.Utilities
+@using PagedList.Mvc
+@model PagedList.IPagedList<MVC.Models.Person>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int rowNum = Model.FirstItemOnPage;
+}
+<style type="text/css">
+    .highlight {
+        color: yellowgreen;
+    }
+</style>
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<h2>Index</h2>
+Search term: <input type="text" name="search" id="txtSearch"/>
+@using (Html.BeginForm("Index","PageListDemo"))
+{
+
+    <table class="table table-responsive">
+        <thead>
+        <tr>
+            <th>SL</th>
+            <th>Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="data-row">
+                <td>
+                    @Html.Raw(rowNum ++)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => item.Name)
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    if (Model != null)
+    {
+        @Html.DropDownList("itemsPerPage", MyExtensionMethod.ItemsPerPageList, new { @id = "ItemsPerPageList", @onchange ="this.form.submit();"})
+    }
+}
+
+@if (Model != null && Model.PageCount > 0)
+{
+    <div>
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, itemsPerPage = ViewBag.CurrentItemsPerPage }), new PagedListRenderOptions{MaximumPageNumbersToDisplay = 5,Display = PagedListDisplayMode.IfNeeded} )
+    </div>
+}
+
+<script type="text/javascript">
+$(document).ready(function () {
+    $('input[name="search"]').keyup(function () {
+        var searchCriteria = $(this).val();
+
+        if (searchCriteria.length > 1) {
+            debugger;
+            var match = $('tr.data-row:contains("' + searchCriteria + '")').show().css('color','yellowgreen');
+            var nomatch = $('tr.data-row:not(:contains("' + searchCriteria + '"))').hide();
+            ///Testing for text highlight
+            //$("tr.data-row").each(function () {
+            //    var searchPattern = new RegExp('(' + SearchTerm() + ')', 'ig');
+            //    $(this).html($(this).htmlText().replace(searchPattern, "<span class = 'highlight'>" + SearchTerm() + "</span>"));
+            //});
+        } else {
+            $('tr.data-row').show().css('color', 'black');
+        }
+    });
+
+    //function SearchTerm() {
+    //    return jQuery.trim($("[id*=txtSearch]").val());
+    //};
+});
+
+</script>
+@*<script type="text/javascript">
+    $(function () {
+        GetCustomers(1);
+    });
+    $("[id*=txtSearch]").live("keyup", function () {
+        GetCustomers(parseInt(1));
+    });
+    $(".Pager .page").live("click", function () {
+        GetCustomers(parseInt($(this).attr('page')));
+    });
+    function SearchTerm() {
+        return jQuery.trim($("[id*=txtSearch]").val());
+    };
+    function GetCustomers(pageIndex) {
+        $.ajax({
+            type: "POST",
+            url: "Default.aspx/GetCustomers",
+            data: '{searchTerm: "' + SearchTerm() + '", pageIndex: ' + pageIndex + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: OnSuccess,
+            failure: function (response) {
+                alert(response.d);
+            },
+            error: function (response) {
+                alert(response.d);
+            }
+        });
+    }
+    var row;
+    function OnSuccess(response) {
+        var xmlDoc = $.parseXML(response.d);
+        var xml = $(xmlDoc);
+        var customers = xml.find("Customers");
+        if (row == null) {
+            row = $("[id*=gvCustomers] tr:last-child").clone(true);
+        }
+        $("[id*=gvCustomers] tr").not($("[id*=gvCustomers] tr:first-child")).remove();
+        if (customers.length > 0) {
+            $.each(customers, function () {
+                var customer = $(this);
+                $("td", row).eq(0).html($(this).find("ContactName").text());
+                $("td", row).eq(1).html($(this).find("CustomerID").text());
+                $("td", row).eq(2).html($(this).find("City").text());
+                $("[id*=gvCustomers]").append(row);
+                row = $("[id*=gvCustomers] tr:last-child").clone(true);
+            });
+            var pager = xml.find("Pager");
+            $(".Pager").ASPSnippets_Pager({
+                ActiveCssClass: "current",
+                PagerCssClass: "pager",
+                PageIndex: parseInt(pager.find("PageIndex").text()),
+                PageSize: parseInt(pager.find("PageSize").text()),
+                RecordCount: parseInt(pager.find("RecordCount").text())
+            });
+
+            $(".ContactName").each(function () {
+                var searchPattern = new RegExp('(' + SearchTerm() + ')', 'ig');
+                $(this).html($(this).text().replace(searchPattern, "<span class = 'highlight'>" + SearchTerm() + "</span>"));
+            });
+        } else {
+            var empty_row = row.clone(true);
+            $("td:first-child", empty_row).attr("colspan", $("td", row).length);
+            $("td:first-child", empty_row).attr("align", "center");
+            $("td:first-child", empty_row).html("No records found for the search criteria.");
+            $("td", empty_row).not($("td:first-child", empty_row)).remove();
+            $("[id*=gvCustomers]").append(empty_row);
+        }
+    };
+</script>*@

@@ -146,6 +146,58 @@ namespace MVC.Utilities
             BinaryExpression assignExpr = Expression.Assign(fieldExpr, valueCast);
             return Expression.Lambda<Action<T, string>>(assignExpr, targetExpr, valueExpr);
         }
+        public static SelectList ItemsPerPageList
+        {
+            get
+            {
+                //return (new SelectList(new List<int> { 5, 10, 25, 50, 100 }));
+                return (new SelectList(new List<int> { 5, 10, 25, 50, 100 }, selectedValue: 10));
+            }
+        }
+        public static IEnumerable<T> FindStringFromValue<T>(IEnumerable<T> aList, string searchItem)
+        {
+            List<T> bList = new List<T>();
+            foreach (var akycinfo in aList)
+            {
+                var found = false;
+                foreach (var prop in akycinfo.GetType().GetProperties())
+                {
+                    var propertyValue = prop.GetValue(akycinfo, null);
+                    var value = "";
+                    if (propertyValue != null)
+                    {
+                        value = propertyValue.ToString().Replace(" ", String.Empty).ToUpper();
+                    }
+                    var searchdata = searchItem.Replace(" ", String.Empty).ToUpper();
+
+                    if (value != "" && value.Contains(searchdata))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (found == true)
+                    bList.Add(akycinfo);
+            }
+            return bList;
+        }
+        public static IEnumerable<T> WhereAtLeastOneProperty<T, PropertyType>(this IEnumerable<T> source, Predicate<PropertyType> predicate)
+        {
+            var properties = typeof(T).GetProperties().Where(prop => prop.CanRead && prop.PropertyType == typeof(PropertyType)).ToArray();
+            return source.Where(item => properties.Any(prop => PropertySatisfiesPredicate(predicate, item, prop)));
+        }
+
+        private static bool PropertySatisfiesPredicate<T, PropertyType>(Predicate<PropertyType> predicate, T item, System.Reflection.PropertyInfo prop)
+        {
+            try
+            {
+                return predicate((PropertyType)prop.GetValue(item));
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 
     public class EnumDescription : Attribute

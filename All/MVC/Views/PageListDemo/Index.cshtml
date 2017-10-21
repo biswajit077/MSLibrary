@@ -1,0 +1,46 @@
+﻿@using MVC.Utilities
+@using PagedList.Mvc
+@model PagedList.IPagedList<MVC.Models.Person>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int rowNum = Model.FirstItemOnPage;
+}
+
+<h2>Index</h2>
+@using (Html.BeginForm("Index","PageListDemo"))
+{
+    <table class="table table-responsive">
+        <thead>
+        <tr>
+            <th>SL</th>
+            <th>Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.Raw(rowNum ++)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => item.Name)
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    if (Model != null)
+    {
+        @Html.DropDownList("itemsPerPage", MyExtensionMethod.ItemsPerPageList, new { @id = "ItemsPerPageList", @onchange ="this.form.submit();"})
+     }
+}
+
+@if (Model != null && Model.PageCount > 0)
+{
+    <div>
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, itemsPerPage = ViewBag.CurrentItemsPerPage }), new PagedListRenderOptions{MaximumPageNumbersToDisplay = 5,Display = PagedListDisplayMode.IfNeeded} )
+    </div>
+}

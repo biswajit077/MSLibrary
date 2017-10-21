@@ -1,0 +1,9 @@
+﻿@model MVC.Models.SearchResults
+
+<div>Results</div>
+<ul>
+    @foreach(var item in Model.Suggestions)
+    {
+        <li>@item</li>
+    }
+</ul>
