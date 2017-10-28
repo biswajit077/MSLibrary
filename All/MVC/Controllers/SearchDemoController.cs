@@ -54,9 +54,15 @@ namespace MVC.Controllers
                     .ForEach(a => a.Name = "00"+a.Name);
                     //.ForEach(a => a.Name = "00"+a.Name);
                     
+            
                 _db.SaveChanges();
 
             return RedirectToAction("Index");
+        }
+
+        public ActionResult JqueryDataTablesDemo()
+        {
+            return View();
         }
     }
 }

@@ -3,15 +3,16 @@
 @model PagedList.IPagedList<MVC.Models.Person>
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
     int rowNum = Model.FirstItemOnPage;
 }
+
 <style type="text/css">
     .highlight {
         color: yellowgreen;
     }
 </style>
-<script src="~/Scripts/jquery-1.10.2.js"></script>
+
 <h2>Index</h2>
 Search term: <input type="text" name="search" id="txtSearch"/>
 @using (Html.BeginForm("Index","PageListDemo"))
@@ -52,31 +53,35 @@ Search term: <input type="text" name="search" id="txtSearch"/>
     </div>
 }
 
-<script type="text/javascript">
-$(document).ready(function () {
-    $('input[name="search"]').keyup(function () {
-        var searchCriteria = $(this).val();
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('input[name="search"]').keyup(function () {
+                var searchCriteria = $(this).val();
 
-        if (searchCriteria.length > 1) {
-            debugger;
-            var match = $('tr.data-row:contains("' + searchCriteria + '")').show().css('color','yellowgreen');
-            var nomatch = $('tr.data-row:not(:contains("' + searchCriteria + '"))').hide();
-            ///Testing for text highlight
-            //$("tr.data-row").each(function () {
-            //    var searchPattern = new RegExp('(' + SearchTerm() + ')', 'ig');
-            //    $(this).html($(this).htmlText().replace(searchPattern, "<span class = 'highlight'>" + SearchTerm() + "</span>"));
-            //});
-        } else {
-            $('tr.data-row').show().css('color', 'black');
-        }
-    });
+                if (searchCriteria.length > 1) {
+                    debugger;
+                    var match = $('tr.data-row:contains("' + searchCriteria + '")').show().css('color','yellowgreen');
+                    var nomatch = $('tr.data-row:not(:contains("' + searchCriteria + '"))').hide();
+                    ///Testing for text highlight
+                    //$("tr.data-row").each(function () {
+                    //    var searchPattern = new RegExp('(' + SearchTerm() + ')', 'ig');
+                    //    $(this).html($(this).htmlText().replace(searchPattern, "<span class = 'highlight'>" + SearchTerm() + "</span>"));
+                    //});
+                } else {
+                    $('tr.data-row').show().css('color', 'black');
+                }
+            });
 
-    //function SearchTerm() {
-    //    return jQuery.trim($("[id*=txtSearch]").val());
-    //};
-});
+            //function SearchTerm() {
+            //    return jQuery.trim($("[id*=txtSearch]").val());
+            //};
+        });
 
-</script>
+    </script>
+}
+
 @*<script type="text/javascript">
     $(function () {
         GetCustomers(1);
