@@ -32,6 +32,7 @@ namespace MVC.Areas.FileProcessing.Controllers
         [HttpPost]
         public JsonResult UploadExcelFile(HttpPostedFileBase FileUpload)
         {
+            // Helps: https://github.com/paulyoder/LinqToExcel
             // IF Error: https://www.microsoft.com/en-us/download/confirmation.aspx?id=23734
             List<string> data = new List<string>();
             if (FileUpload != null)
