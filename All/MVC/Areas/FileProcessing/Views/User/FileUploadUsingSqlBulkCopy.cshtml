@@ -1,0 +1,19 @@
+﻿@{
+    Layout = null;
+}
+ 
+<!DOCTYPE html>
+ 
+<html>
+<head>
+    <meta name="viewport" content="width=device-width"/>
+    <title>Index</title>
+</head>
+<body>
+@using (Html.BeginForm("FileUploadUsingSqlBulkCopy", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input type="file" name="postedFile"/>
+    <input type="submit" value="Import"/>
+}
+</body>
+</html>
