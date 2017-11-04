@@ -11,6 +11,7 @@ using System.Linq.Expressions;
 using System.Web;
 
 using MVC.Models;
+using MVC.Utilities;
 
 namespace MVC.Utilities
 {
@@ -37,57 +38,27 @@ namespace MVC.Utilities
                 _db.SaveChanges();
             }
         }
-        //public TEntity AddOrUpdate<TEntity>(DbContext context, TEntity entity)
-        //    where TEntity : class
-        //{
-        //    var tracked = context.Set<TEntity>().Find(context.KeyValuesFor(entity));
-        //    if (tracked != null)
-        //    {
-        //        context.Entry(tracked).CurrentValues.SetValues(entity);
-        //        return tracked;
-        //    }
 
-        //    context.Set<TEntity>().Add(entity);
-        //    return entity;
-        //}
+        /// <summary>
+        /// Single Data or Single Row AddOrUpdate
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="context"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public TEntity AddOrUpdate<TEntity>(DbContext context, TEntity entity)
+            where TEntity : class
+        {
+            var tracked = context.Set<TEntity>().Find(context.KeyValuesFor(entity));
+            if (tracked != null)
+            {
+                context.Entry(tracked).CurrentValues.SetValues(entity);
+                return tracked;
+            }
 
-        //public static IEnumerable<string> KeysFor(this DbContext context, Type entityType)
-        //{
-        //    Contract.Requires(context != null);
-        //    Contract.Requires(entityType != null);
-
-        //    entityType = ObjectContext.GetObjectType(entityType);
-
-        //    var metadataWorkspace =
-        //        ((IObjectContextAdapter)context).ObjectContext.MetadataWorkspace;
-        //    var objectItemCollection =
-        //        (ObjectItemCollection)metadataWorkspace.GetItemCollection(DataSpace.OSpace);
-
-        //    var ospaceType = metadataWorkspace
-        //        .GetItems<EntityType>(DataSpace.OSpace)
-        //        .SingleOrDefault(t => objectItemCollection.GetClrType(t) == entityType);
-
-        //    if (ospaceType == null)
-        //    {
-        //        throw new ArgumentException(
-        //            string.Format(
-        //                "The type '{0}' is not mapped as an entity type.",
-        //                entityType.Name),
-        //            "entityType");
-        //    }
-
-        //    return ospaceType.KeyMembers.Select(k => k.Name);
-        //}
-        //public static object[] KeyValuesFor(this DbContext context, object entity)
-        //{
-        //    Contract.Requires(context != null);
-        //    Contract.Requires(entity != null);
-
-        //    var entry = context.Entry(entity);
-        //    return context.KeysFor(entity.GetType())
-        //        .Select(k => entry.Property(k).CurrentValue)
-        //        .ToArray();
-        //}
+            context.Set<TEntity>().Add(entity);
+            return entity;
+        }
         public void UpdatePerson(Person person)
         {
             this._db.Persons.Attach(person);
@@ -110,8 +81,6 @@ namespace MVC.Utilities
             entry.Property(e => e.Name).IsModified = true;
             _db.SaveChanges();
         }
-
-       
         public static object GetPropValue(object src, string propName)
         {
             return src.GetType().GetProperty(propName).GetValue(src, null);
@@ -147,14 +116,6 @@ namespace MVC.Utilities
                     .Sum(dir => DirectorySize(dir, true));
             }
             return totalSize;
-        }
-
-        public void A()
-        {
-            List<Person> a = new List<Person>();
-            List<Person> b = new List<Person>();
-            var sameornot = a.SequenceEqual(b);
-            var diff = a.Except(b);
         }
     }
 
@@ -224,20 +185,4 @@ namespace MVC.Utilities
     public interface IRepository<T>
     {
     }
-
-
-    /***
-     * LINQ LEFT JOIN
-     * */
-    //var orderForBooks = from bk in bookList
-    //join ordr in bookOrders
-    //on bk.BookID equals ordr.BookID
-    //into a
-    //from b in a.DefaultIfEmpty(new Order())
-    //select new
-    //{
-    //    bk.BookID,
-    //    Name = bk.BookNm,
-    //    b.PaymentMode
-    //};
 }
