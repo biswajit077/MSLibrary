@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design.Data;
 using System.Configuration;
 using System.Data;
 using System.Data.Entity.Validation;
@@ -12,11 +11,10 @@ using System.Web;
 using System.Web.Mvc;
 using ExcelDataReader;
 using LinqToExcel;
-using ModelClass;
 using MVC.Areas.FileProcessing.Models;
+using MVC.Models;
 using MVC.Utilities;
 using OfficeOpenXml;
-
 
 namespace MVC.Areas.FileProcessing.Controllers
 {
@@ -28,16 +26,45 @@ namespace MVC.Areas.FileProcessing.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public ActionResult Index(HttpPostedFileBase files)
         {
-            var listPerson = new List<Person>
+            HttpPostedFileBase f = Request.Files["FileUpload"];
+            var tbl = new DataTable();
+            if (Path.GetExtension(f.FileName) == ".xlsx")
             {
-                new Person() { PersonID = 1, car = "BMW"},
-                new Person() { PersonID = 2, car = "BMW"}
-            };
+                using (var excel = new ExcelPackage(f.InputStream))
+                {
+                    var ws = excel.Workbook.Worksheets.First();
+                    var hasHeader = true;  // adjust accordingly
+                    // add DataColumns to DataTable
+                    foreach (var firstRowCell in ws.Cells[1, 1, 1, ws.Dimension.End.Column])
+                        tbl.Columns.Add(hasHeader ? firstRowCell.Text
+                            : String.Format("Column {0}", firstRowCell.Start.Column));
 
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["SomeConnectionString"].ConnectionString))
+                    // add DataRows to DataTable
+                    int startRow = hasHeader ? 2 : 1;
+                    for (int rowNum = startRow; rowNum <= ws.Dimension.End.Row; rowNum++)
+                    {
+                        var wsRow = ws.Cells[rowNum, 1, rowNum, ws.Dimension.End.Column];
+                        DataRow row = tbl.NewRow();
+                        foreach (var cell in wsRow)
+                            row[cell.Start.Column - 1] = cell.Text;
+                        tbl.Rows.Add(row);
+                    }
+                    var msg = String.Format("DataTable successfully created from excel-file. Colum-count:{0} Row-count:{1}",
+                        tbl.Columns.Count, tbl.Rows.Count);
+                    //UploadStatusLabel.Text = msg;
+                }
+            }
+            else
+            {
+                //UploadStatusLabel.Text = "You did not specify a file to upload.";
+            }
+
+            List<Person> listPerson = new List<Person>();
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString))
             {
                 connection.Open();
                 SqlTransaction transaction = connection.BeginTransaction();
@@ -45,22 +72,24 @@ namespace MVC.Areas.FileProcessing.Controllers
                 using (var bulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
                 {
                     bulkCopy.BatchSize = 100;
-                    bulkCopy.DestinationTableName = "dbo.Person";
+                    bulkCopy.DestinationTableName = "dbo.Persons";
                     try
                     {
-                        bulkCopy.WriteToServer(listPerson.ToDataTable());
+                        //bulkCopy.WriteToServer(listPerson.ToDataTable());
+                        bulkCopy.WriteToServer(tbl);
                     }
-                    catch (Exception)
+                    catch (Exception exeException)
                     {
                         transaction.Rollback();
-                        connection.Close();
                     }
                 }
 
                 transaction.Commit();
+                connection.Close();
             }
             return View();
         }
+       
         #endregion
         public FileResult DownloadExcel()
         {

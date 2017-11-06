@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Linq.Expressions;
@@ -49,7 +51,7 @@ namespace MVC.Utilities
         void Delete(Expression<Func<T, bool>> criteria);
 
         void Save();
-
+        IList<string> GetPrimaryKeys(T entity);
     }
 
     public abstract class GenericRepository<C, T> :
@@ -259,9 +261,17 @@ namespace MVC.Utilities
         }
         public T SQLQuery<T>(string sql)
         {
-            
             return _entities.Database.SqlQuery<T>(sql).FirstOrDefault();
         }
 
+        public virtual IList<string> GetPrimaryKeys(T entity)
+        {
+            ObjectContext objectContext = ((IObjectContextAdapter)_entities).ObjectContext;
+            ObjectSet<T> set = objectContext.CreateObjectSet<T>();
+            IList<string> pKeys = set.EntitySet.ElementType
+                .KeyMembers
+                .Select(k => k.Name).ToList();
+            return pKeys;
+        }
     }
 }
