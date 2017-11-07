@@ -251,7 +251,7 @@ namespace MVC.Utilities
         /// <typeparam name="T"></typeparam>
         /// <param name="dt"></param>
         /// <returns>List Data</returns>
-        private static List<T> ConvertDataTableToList<T>(DataTable dt)
+        public static List<T> ConvertDataTableToList<T>(DataTable dt)
         {
             List<T> data = new List<T>();
             foreach (DataRow row in dt.Rows)
@@ -262,12 +262,52 @@ namespace MVC.Utilities
             return data;
         }
         /// <summary>
+        /// Converts a DataTable to a list with generic objects
+        /// </summary>
+        /// <typeparam name="T">Generic object</typeparam>
+        /// <param name="table">DataTable</param>
+        /// <returns>List with generic objects</returns>
+        public static List<T> DataTableToList<T>(this DataTable table) where T : class, new()
+        {
+            try
+            {
+                List<T> list = new List<T>();
+
+                foreach (var row in table.AsEnumerable())
+                {
+                    T obj = new T();
+
+                    foreach (var prop in obj.GetType().GetProperties())
+                    {
+                        try
+                        {
+                            PropertyInfo propertyInfo = obj.GetType().GetProperty(prop.Name);
+                            propertyInfo.SetValue(obj, Convert.ChangeType(row[prop.Name], propertyInfo.PropertyType), null);
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+
+                    list.Add(obj);
+                }
+
+                return list;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Convert List Data To DataTable
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="data"></param>
         /// <returns>DataTable</returns>
-        public static DataTable ConvertListToDataTable<T>(IList<T> data)
+        public static DataTable ConvertListToDataTable<T>(this IList<T> data)
         {
             PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(T));
             DataTable table = new DataTable();

@@ -15,7 +15,7 @@ using MVC.Areas.FileProcessing.Models;
 using MVC.Models;
 using MVC.Utilities;
 using OfficeOpenXml;
-
+using static  MVC.Utilities.GlobalCommonExtensionMethod;
 namespace MVC.Areas.FileProcessing.Controllers
 {
     public class UserController : Controller
@@ -76,7 +76,9 @@ namespace MVC.Areas.FileProcessing.Controllers
                     try
                     {
                         //bulkCopy.WriteToServer(listPerson.ToDataTable());
-                        bulkCopy.WriteToServer(tbl);
+                        //bulkCopy.WriteToServer(tbl);
+                        var a = tbl.DataTableToList<Person>();
+                        _db.BulkInsert(a);
                     }
                     catch (Exception exeException)
                     {
